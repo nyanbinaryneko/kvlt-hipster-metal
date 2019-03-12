@@ -1,11 +1,14 @@
 import markovify
 
-if __name__ == "__main__":
+def generate_genre(total):
     with open("./corpus/genres.txt") as f:
         text = f.read()
     
     # build model
     text_model = markovify.NewlineText(text)
 
-    for i in range(10):
-        print(f'bullshit genre: {text_model.make_short_sentence(100)}')
+    # make a new genre:
+    genre = text_model.make_short_sentence(total)
+    print(f'bullshit genre: {genre}')
+    return genre
+    
