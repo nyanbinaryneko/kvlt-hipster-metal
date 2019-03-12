@@ -3,8 +3,7 @@ import time
 import tweepy
 import os
 
-INTERVAL = 60
-
+INTERVAL = 60 * 60
 CONSUMER_API = os.environ["CONSUMER_API_KEY"]
 CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
 ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
