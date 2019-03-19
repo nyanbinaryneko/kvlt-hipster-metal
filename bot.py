@@ -2,6 +2,11 @@ from markov import generate_genre
 import time
 import tweepy
 import os
+import markovify
+import logging
+
+log = logging.getLogger("bot")
+log.setLevel(logging.DEBUG)
 
 CONSUMER_API = os.environ["CONSUMER_API_KEY"]
 CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
@@ -16,7 +21,7 @@ auth = tweepy.OAuthHandler(CONSUMER_API, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-print("generating sentence")
+log.debug("generating sentence")
 total = 280 - len(STEM)
 sentence = f'{STEM}{generate_genre(total)}'
 api.update_status(sentence)
