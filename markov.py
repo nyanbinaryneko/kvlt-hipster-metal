@@ -1,4 +1,8 @@
 import markovify
+import logging
+
+log = logging.getLogger("markov")
+log.setLevel(logging.DEBUG)
 
 def generate_genre(total):
     with open("./corpus/genres.txt") as f:
@@ -9,6 +13,6 @@ def generate_genre(total):
 
     # make a new genre:
     genre = text_model.make_short_sentence(total)
-    print(f'bullshit genre: {genre}')
+    log.debug(f'bullshit genre: {genre}')
     return genre
     
