@@ -25,4 +25,6 @@ if random.randint(0, 10) == 1:
 else:
     sentence = f'{STEM}'
 print(f'bot - finished sentence: {sentence}')
+if "rac" in sentence.lower():
+    sentence = f'{genre.upper()} IS FOR FUCKING POSERS. LISTEN TO REAL METAL YOU PANDA COSPLAYERS!'
 api.update_status(sentence)
