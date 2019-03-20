@@ -24,5 +24,5 @@ api = tweepy.API(auth)
 print("bot - generating sentence")
 total = 280 - len(STEM)
 sentence = f'{STEM}{generate_genre(total)}'
-print("bot - generating sentence: {sentence}")
+print(f'bot - generating sentence: {sentence}')
 api.update_status(sentence)
