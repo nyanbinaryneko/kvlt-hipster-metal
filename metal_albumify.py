@@ -45,13 +45,29 @@ foreground is 30.918367346938773% of bg width and  20.214521452145213% of bg hei
 
 #yatta
 """
-resize = (int(resize_width), int(resize_height))
+resize = (int(resize_width), int(resize_height)) # cast to int because it yelled at me, and i'm too lazy to figure out floating point shit for perfection
 
 foreground_img = foreground_img.resize(resize, Image.ANTIALIAS)
 
-background_img.paste(foreground_img, (0,0), foreground_img) # paste her on?
+# background_img.paste(foreground_img, (0,0), foreground_img) # paste her on?
 # save without converting this time
-background_img.save('./corpus/img/output/out3.jpg')
+# background_img.save('./corpus/img/output/out3.jpg')
 
+"""
+resize to aspect ratio done. let's move it to quadrants
+metal logos tend to be top right (0.0) ✔️, 
+top center (???, 0), 
+top left (max - logo_w, 0)
+bottom left (max - logo_w, max_y), 
+and bottom center (???,max)
+lowest hanging fruit is top left.
+"""
+
+# top left:
+fg_size = foreground_img.size # get the resize from above.
+top_left = (bg_size[0] - fg_size[0], 0) # should be right...or left?
+background_img.paste(foreground_img, top_left, foreground_img) # paste her on?
+# save without converting this time
+background_img.save('./corpus/img/output/out4.jpg')
 
 
