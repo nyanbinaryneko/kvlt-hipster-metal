@@ -57,17 +57,23 @@ foreground_img = foreground_img.resize(resize, Image.ANTIALIAS)
 resize to aspect ratio done. let's move it to quadrants
 metal logos tend to be top right (0.0) ✔️, 
 top center (???, 0), 
-top left (max - logo_w, 0)
-bottom left (max - logo_w, max_y), 
-and bottom center (???,max)
+top left (max - logo_w, 0)✔️,
+bottom left (max - logo_w, max_y - logo_h) ✔️, 
+and bottom center (???,max_y - logo_h)
 lowest hanging fruit is top left.
 """
 
 # top left:
 fg_size = foreground_img.size # get the resize from above.
 top_left = (bg_size[0] - fg_size[0], 0) # should be right...or left?
-background_img.paste(foreground_img, top_left, foreground_img) # paste her on?
+# background_img.paste(foreground_img, top_left, foreground_img) # paste her on?
 # save without converting this time
-background_img.save('./corpus/img/output/out4.jpg')
+# background_img.save('./corpus/img/output/out4.jpg')
+
+# bottom left:
+bottom_left = (bg_size[0] - fg_size[0], bg_size[1] - fg_size[1])
+background_img.paste(foreground_img, bottom_left, foreground_img) # paste her on?
+# save without converting this time
+background_img.save('./corpus/img/output/out5.jpg')
 
 
