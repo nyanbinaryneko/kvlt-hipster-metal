@@ -105,11 +105,11 @@ class AlbumCover:
         self.bg = Image.open(requests.get(bg_url, stream=True).raw) #I really don't want to save this on Heroku
         self.logo = Image.open(logo_path)
         self.bg_size = self.bg.size
-        self.logo = self.logo.resize(resize_logo(25), Image.ANTIALIAS)
+        self.logo = self.logo.resize(__resize_logo__(25), Image.ANTIALIAS)
         self.logo_size = self.logo.size
-        self.logo_placement = logo_placement()
+        self.logo_placement = __logo_placement__()
     
-        def resize_logo(self, percent):
+        def __resize_logo__(self, percent):
             target_width = self.bg_size[0] * (percent / 100)
             target_height = self.bg_size[1] * (percent / 100)
             # maintain aspect ratio
@@ -117,7 +117,7 @@ class AlbumCover:
             resize_height = target_height * (self.logo.size[1] / self.logo.size[0])
             return (int(resize_width), int(resize_height))
 
-        def logo_placement(self):
+        def __logo_placement__(self):
             # basic calcs
             top_right = (0, 0)
             bottom = self.bg_size[1] - self.logo_size[1]
