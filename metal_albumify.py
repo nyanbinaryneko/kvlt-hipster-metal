@@ -71,35 +71,24 @@ top_left = (bg_size[0] - fg_size[0], 0) # should be right...or left?
 # background_img.save('./corpus/img/output/out4.jpg')
 
 # bottom left:
-<<<<<<< HEAD
 bottom = bg_size[1] - fg_size[1]
 bottom_left = (bg_size[0] - fg_size[0], bottom)
-=======
-bottom_left = (bg_size[0] - fg_size[0], bg_size[1] - fg_size[1])
->>>>>>> ffc39046eb3bbdcbb4dc38a68ce5c84d38535539
 # background_img.paste(foreground_img, bottom_left, foreground_img) # paste her on?
 # save without converting this time
 # background_img.save('./corpus/img/output/out5.jpg')
 
 # top center:
-<<<<<<< HEAD
 center_width = (bg_size[0]  / 2) - (fg_size[0] / 2)
-=======
-center_width = (bg_size[0] * 0.2) + (fg_size[0] / 2)
->>>>>>> ffc39046eb3bbdcbb4dc38a68ce5c84d38535539
 top_center = (int(center_width), 0)
 # background_img.paste(foreground_img, top_center, foreground_img) # paste her on?
 # save without converting this time
 # background_img.save('./corpus/img/output/out6.jpg')
 
-<<<<<<< HEAD
 # bottom center
 top_center = (int(center_width), bottom)
 background_img.paste(foreground_img, top_center, foreground_img) # paste her on?
 # save without converting this time
 background_img.save('./corpus/img/output/out7.jpg')
 
-=======
->>>>>>> ffc39046eb3bbdcbb4dc38a68ce5c84d38535539
 
 
