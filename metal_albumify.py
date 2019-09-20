@@ -72,8 +72,16 @@ top_left = (bg_size[0] - fg_size[0], 0) # should be right...or left?
 
 # bottom left:
 bottom_left = (bg_size[0] - fg_size[0], bg_size[1] - fg_size[1])
-background_img.paste(foreground_img, bottom_left, foreground_img) # paste her on?
+# background_img.paste(foreground_img, bottom_left, foreground_img) # paste her on?
 # save without converting this time
-background_img.save('./corpus/img/output/out5.jpg')
+# background_img.save('./corpus/img/output/out5.jpg')
+
+# top center:
+center_width = (bg_size[0] * 0.2) + (fg_size[0] / 2)
+top_center = (int(center_width), 0)
+# background_img.paste(foreground_img, top_center, foreground_img) # paste her on?
+# save without converting this time
+# background_img.save('./corpus/img/output/out6.jpg')
+
 
 
