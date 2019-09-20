@@ -108,7 +108,7 @@ class AlbumCover:
         self.logo = self.logo.resize(__resize_logo__(25), Image.ANTIALIAS)
         self.logo_size = self.logo.size
         self.logo_placement = __logo_placement__()
-    
+
         def __resize_logo__(self, percent):
             target_width = self.bg_size[0] * (percent / 100)
             target_height = self.bg_size[1] * (percent / 100)
@@ -132,18 +132,9 @@ class AlbumCover:
             # bottom center
             bottom_center = (int(center_width), bottom)
             rnd = random.randint(0, 4) # get random int between 0 and 4.
-            if rnd == 0:
-                return top_right
-            elif rnd == 1:
-                return top_left
-            elif rnd == 2:
-                return top_center
-            elif rnd == 3:
-                return bottom_left
-            elif rnd == 4:
-                return bottom_center
-            return top_right
-    
+            return_values = {0:top_right,1:top_left,2:top_center,3:bottom_left,4:bottom_center}
+            return return_values.get(rnd,top_right)
+
     def paste_logo_image(self):
         # img = background_img.convert("L") #transformation()
         self.transform_image()
@@ -151,6 +142,6 @@ class AlbumCover:
         self.bg.paste(self.logo, self.logo_placement, self.logo)
         self.bg.save(path_for_post_to_twitter) # save it for debugging\
         return path_for_post_to_twitter
-    
+
     def transform_image(self):
         self.bg = self.bg.convert("L") # just greyscale it for now.
