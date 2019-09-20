@@ -146,7 +146,11 @@ class AlbumCover:
     
     def paste_logo_image(self):
         # img = background_img.convert("L") #transformation()
+        self.transform_image()
         path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
         self.bg.paste(self.logo, self.logo_placement, self.logo)
         self.bg.save(path_for_post_to_twitter) # save it for debugging\
         return path_for_post_to_twitter
+    
+    def transform_image(self):
+        self.bg = self.bg.convert("L") # just greyscale it for now.
