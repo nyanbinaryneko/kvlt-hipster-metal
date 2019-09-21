@@ -2,10 +2,17 @@ from PIL import Image
 import random
 import requests
 import time
+import os 
+
+DEBUG = os.environ["DEBUG"].lower() == "true"
+
 class AlbumCover:
     def __init__(self, bg_url, logo_path):
         # https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#media
-        self.bg = Image.open(requests.get(bg_url, stream=True).raw) #I really don't want to save this on Heroku
+        if not DEBUG:
+            self.bg = Image.open(requests.get(bg_url, stream=True).raw) #I really don't want to save this on Heroku
+        else:
+            self.bg = Image.open(bg_url)
         self.logo = Image.open(logo_path)
         self.bg_size = self.bg.size
         self.logo = self.logo.resize(self.resize_logo(25), Image.ANTIALIAS)

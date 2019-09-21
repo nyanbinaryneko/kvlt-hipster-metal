@@ -8,15 +8,11 @@ import random
 from metal_albumify import AlbumCover
 import json
 
-log = logging.getLogger("bot")
-log.setLevel(logging.DEBUG)
-
 CONSUMER_API = os.environ["CONSUMER_API_KEY"]
 CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
 ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
 ACCESS_SECRET = os.environ["ACCESS_SECRET"]
-
-DEBUG = True
+DEBUG = os.environ["DEBUG"].lower() == "true"
 
 auth = tweepy.OAuthHandler(CONSUMER_API, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
@@ -38,16 +34,33 @@ if not DEBUG:
 # disabled and credit the author of the tweet for posting the pic.
 
 if DEBUG:
-    from_account = random.choice(["snepbot"])
-    tweets = []
-    for tweet in tweepy.Cursor(api.user_timeline, id=from_account, tweet_mode='extended', exclude_replies=True).items(100):
-        tweet.entities["media"] = [m for m in tweet.entities["media"] if m["type"] == "photo"]
-        if(len(tweet.entities["media"]) > 0):
-            tweets.append(tweet)
-    tw = random.choice(tweets)
+    root_dir = "./corpus"
+    test_cats = []
+
+    # grab random test pet
+    for dir_, _, files in os.walk(root_dir):
+        for file_name in files:
+            rel_dir = os.path.relpath(dir_, root_dir)
+            rel_file = os.path.join(rel_dir, file_name)
+            if "img/test" in rel_file:
+                test_cats.append(f'{root_dir}/{rel_file}')
+    
+    cover = AlbumCover(random.choice(test_cats), f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
+    print(cover)
+    
+    """
+    still refining this, but working more on the bot part of this, but for now, its done-ish. working on deepfrying
+    """
+    # from_account = random.choice(["snepbot"])
+    # tweets = []
+    # for tweet in tweepy.Cursor(api.user_timeline, id=from_account, tweet_mode='extended', exclude_replies=True).items(100):
+    #     tweet.entities["media"] = [m for m in tweet.entities["media"] if m["type"] == "photo"]
+    #     if(len(tweet.entities["media"]) > 0):
+    #         tweets.append(tweet)
+    # tw = random.choice(tweets)
     # status = api.get_status(id="1175100612410839041")
-    media = tw.entities["media"]
-    cover = AlbumCover(media[0]["media_url_https"], './corpus/img/testlogo.png').paste_logo_image()
-    api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: https://twitter.com/{from_account}/status/{tw.id_str}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
+    # media = tw.entities["media"]
+    # cover = AlbumCover(media[0]["media_url_https"], './corpus/img/logos/testlogo.png').paste_logo_image()
+    # api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: https://twitter.com/{from_account}/status/{tw.id_str}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
 
 

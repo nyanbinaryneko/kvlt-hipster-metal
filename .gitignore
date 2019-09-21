@@ -1,3 +1,5 @@
 secrets.*
 __pycache__
 env/*
+corpus/img/output/*
+corpus/img/test/*
