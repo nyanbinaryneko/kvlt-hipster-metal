@@ -54,15 +54,17 @@ class AlbumCover:
         # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
         # self.bg.paste(self.logo, self.logo_placement, self.logo)
         # self.bg.save(path_for_post_to_twitter) # save it for debugging\
-        self.bg.save("./corpus/img/output/out_test_glytch.jpg")
-        return "./corpus/img/output/out_test_glytch.jpg"
+        self.bg.save("./corpus/img/output/out_test_poisson.jpg")
+        return "./corpus/img/output/out_test_poisson.jpg"
         # return path_for_post_to_twitter
 
     def transform_image(self):
         # self.gaussian_noise()
-        self.salt_n_pepper()
+        # self.salt_n_pepper()
+        self.poisson()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
+    # noise transformers
     def gaussian_noise(self):
         img = self.bg_to_nparray()
         row, col, ch = img.shape
@@ -77,9 +79,8 @@ class AlbumCover:
 
     def salt_n_pepper(self):
         image = self.bg_to_nparray()
-        s_vs_p = 0.5
-        # amount = 0.004
-        amount = 0.004 # amount to fry
+        s_vs_p = 0.5 # salt vs pepper rate????
+        amount = 0.004 # fry amount
         out = image
         # Generate Salt '1' noise
         num_salt = np.ceil(amount * image.size * s_vs_p)
@@ -92,6 +93,14 @@ class AlbumCover:
             for i in image.shape]
         out[coords] = 0
         self.nparray_to_bg(out)
+    
+    def poisson(self):
+        image = self.bg_to_nparray()
+        vals = len(np.unique(image))
+        vals = 2 ** np.ceil(np.log2(vals))
+        noisy = np.random.poisson(image * vals) / float(vals)
+        # print(type(noisy))
+        self.nparray_to_bg(noisy.astype('uint8'))
 
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):

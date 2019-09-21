@@ -105,3 +105,5 @@ darkthrone, batushka, ghost, mastadon, nightwish, battlebeast/beast in black, rh
 [4:27 PM] Тишина Tishina: Iron maiden and judas priest :eyes:
 
 http://www.xiaoliangbai.com/2016/09/09/more-on-image-noise-generation
+
+todo: use this to make frypy - a lib for making fried memes
