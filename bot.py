@@ -46,8 +46,7 @@ if DEBUG:
     tw = random.choice(tweets)
     # status = api.get_status(id="1175100612410839041")
     media = tw.entities["media"]
-    print(tw.extended_entities["media"][0]["url"])
     cover = AlbumCover(media[0]["media_url_https"], './corpus/img/testlogo.png').paste_logo_image()
-    api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: {tw.extended_entities["media"][0]["url"]}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
+    api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: {tw.extended_entities["media"][0]["expanded_url"]}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
 
 
