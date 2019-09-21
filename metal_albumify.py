@@ -51,19 +51,21 @@ class AlbumCover:
     def paste_logo_image(self):
         # img = background_img.convert("L") #transformation()
         self.transform_image()
-        # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
-        # self.bg.paste(self.logo, self.logo_placement, self.logo)
-        # self.bg.save(path_for_post_to_twitter) # save it for debugging\
-        self.bg.save("./corpus/img/output/out_test_speckle.jpg")
-        return "./corpus/img/output/out_test_speckle.jpg"
-        # return path_for_post_to_twitter
+        path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
+        self.bg.paste(self.logo, self.logo_placement, self.logo)
+        self.bg.save(path_for_post_to_twitter) # save it for debugging\
+        return path_for_post_to_twitter
 
     def transform_image(self):
+        # add noise
+        noise = random.randint(0,7)
+        {0:self.gaussian_noise(), 1:self.salt_n_pepper(), 2:self.poisson(), 3:self.speckle_noise()}.get(noise, self.bg)
         # self.gaussian_noise()
         # self.salt_n_pepper()
         # self.poisson()
         # self.speckle_noise()
-        # self.bg = self.bg.convert("L") # just greyscale it for now.
+        print(self.bg)
+        self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
     def gaussian_noise(self):
@@ -100,7 +102,6 @@ class AlbumCover:
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
         noisy = np.random.poisson(image * vals) / float(vals)
-        # print(type(noisy))
         self.nparray_to_bg(noisy.astype('uint8'))
 
     def speckle_noise(self):
@@ -109,11 +110,13 @@ class AlbumCover:
         gauss = np.random.randn(row,col,ch)
         gauss = gauss.reshape(row,col,ch)        
         noisy = image + image * gauss
-        return self.nparray_to_bg(noisy.astype('uint8'))
+        self.nparray_to_bg(noisy.astype('uint8'))
 
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):
         return np.array(self.bg)
     
     def nparray_to_bg(self, arr):
-        self.bg = Image.fromarray(arr)
+        img = Image.fromarray(arr)
+        img.convert('RGB')
+        self.bg = img

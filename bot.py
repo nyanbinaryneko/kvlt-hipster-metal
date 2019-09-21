@@ -45,7 +45,7 @@ if DEBUG:
             if "img/test" in rel_file:
                 test_cats.append(f'{root_dir}/{rel_file}')
     
-    cover = AlbumCover(f'{root_dir}/img/test/test1.jpg', f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
+    cover = AlbumCover(f'{random.choice(test_cats)}', f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
     print(cover)
     
     """
