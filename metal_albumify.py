@@ -1,4 +1,7 @@
 from PIL import Image
+import numpy as np 
+from scipy.ndimage import filters
+from scipy import misc
 import random
 import requests
 import time
@@ -48,10 +51,51 @@ class AlbumCover:
     def paste_logo_image(self):
         # img = background_img.convert("L") #transformation()
         self.transform_image()
-        path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
-        self.bg.paste(self.logo, self.logo_placement, self.logo)
-        self.bg.save(path_for_post_to_twitter) # save it for debugging\
-        return path_for_post_to_twitter
+        # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
+        # self.bg.paste(self.logo, self.logo_placement, self.logo)
+        # self.bg.save(path_for_post_to_twitter) # save it for debugging\
+        self.bg.save("./corpus/img/output/out_test_glytch.jpg")
+        return "./corpus/img/output/out_test_glytch.jpg"
+        # return path_for_post_to_twitter
 
     def transform_image(self):
-        self.bg = self.bg.convert("L") # just greyscale it for now.
+        # self.gaussian_noise()
+        self.salt_n_pepper()
+        # self.bg = self.bg.convert("L") # just greyscale it for now.
+
+    def gaussian_noise(self):
+        img = self.bg_to_nparray()
+        row, col, ch = img.shape
+        mean = 0.0 # ???
+        var = 10 # adjust this for FRYING LEVEL, originally 0.01
+        sigma = var**0.5 # ???
+        gauss = np.array(img.shape)
+        gauss = np.random.normal(mean, sigma,(row, col, ch))
+        gauss = gauss.reshape(row, col, ch)
+        noisy = img + gauss
+        self.nparray_to_bg(noisy.astype('uint8'))
+
+    def salt_n_pepper(self):
+        image = self.bg_to_nparray()
+        s_vs_p = 0.5
+        # amount = 0.004
+        amount = 0.004 # amount to fry
+        out = image
+        # Generate Salt '1' noise
+        num_salt = np.ceil(amount * image.size * s_vs_p)
+        coords = [np.random.randint(0, i - 1, int(num_salt))
+            for i in image.shape]
+        out[coords] = 255
+        # Generate Pepper '0' noise
+        num_pepper = np.ceil(amount* image.size * (1. - s_vs_p))
+        coords = [np.random.randint(0, i - 1, int(num_pepper))
+            for i in image.shape]
+        out[coords] = 0
+        self.nparray_to_bg(out)
+
+    # helpers. written out to convert between the libs for image manipulation
+    def bg_to_nparray(self):
+        return np.array(self.bg)
+    
+    def nparray_to_bg(self, arr):
+        self.bg = Image.fromarray(arr)

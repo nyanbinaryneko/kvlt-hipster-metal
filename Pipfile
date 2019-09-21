@@ -11,6 +11,8 @@ markovify = "*"
 Flask = "*"
 pillow = "*"
 requests = "*"
+numpy = "*"
+scipy = "*"
 
 [requires]
 python_version = "3.6"
