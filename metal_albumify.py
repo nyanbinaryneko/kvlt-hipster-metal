@@ -54,14 +54,15 @@ class AlbumCover:
         # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
         # self.bg.paste(self.logo, self.logo_placement, self.logo)
         # self.bg.save(path_for_post_to_twitter) # save it for debugging\
-        self.bg.save("./corpus/img/output/out_test_poisson.jpg")
-        return "./corpus/img/output/out_test_poisson.jpg"
+        self.bg.save("./corpus/img/output/out_test_speckle.jpg")
+        return "./corpus/img/output/out_test_speckle.jpg"
         # return path_for_post_to_twitter
 
     def transform_image(self):
         # self.gaussian_noise()
         # self.salt_n_pepper()
-        self.poisson()
+        # self.poisson()
+        # self.speckle_noise()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
@@ -101,6 +102,14 @@ class AlbumCover:
         noisy = np.random.poisson(image * vals) / float(vals)
         # print(type(noisy))
         self.nparray_to_bg(noisy.astype('uint8'))
+
+    def speckle_noise(self):
+        image = self.bg_to_nparray()
+        row, col, ch = image.shape
+        gauss = np.random.randn(row,col,ch)
+        gauss = gauss.reshape(row,col,ch)        
+        noisy = image + image * gauss
+        return self.nparray_to_bg(noisy.astype('uint8'))
 
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):
