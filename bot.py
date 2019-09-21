@@ -38,8 +38,9 @@ if not DEBUG:
 # disabled and credit the author of the tweet for posting the pic.
 
 if DEBUG:
+    from_account = random.choice(["snepbot"])
     tweets = []
-    for tweet in tweepy.Cursor(api.user_timeline, id="snepbot", tweet_mode='extended', exclude_replies=True).items(100):
+    for tweet in tweepy.Cursor(api.user_timeline, id=from_account, tweet_mode='extended', exclude_replies=True).items(100):
         tweet.entities["media"] = [m for m in tweet.entities["media"] if m["type"] == "photo"]
         if(len(tweet.entities["media"]) > 0):
             tweets.append(tweet)
@@ -47,6 +48,6 @@ if DEBUG:
     # status = api.get_status(id="1175100612410839041")
     media = tw.entities["media"]
     cover = AlbumCover(media[0]["media_url_https"], './corpus/img/testlogo.png').paste_logo_image()
-    api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: {tw.extended_entities["media"][0]["expanded_url"]}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
+    api.update_with_media(filename=cover, status=f'henlo mxtress, here is that test for you: its from my friend here!!: https://twitter.com/{from_account}/status/{tw.id_str}' , in_reply_to_status_id="1175100612410839041",  auto_populate_reply_metadata=True)
 
 
