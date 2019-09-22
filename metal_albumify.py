@@ -51,18 +51,36 @@ class AlbumCover:
     def paste_logo_image(self):
         # img = background_img.convert("L") #transformation()
         self.transform_image()
-        path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
+        # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
+        path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}.jpg'
         # self.bg.paste(self.logo, self.logo_placement, self.logo)
         self.bg.save(path_for_post_to_twitter) # save it for debugging\
         return path_for_post_to_twitter
 
     def transform_image(self):
+        # i think the workflow here should be:
+        # enhance/dehance a random number of times.
+        # add noise a random number of times.
+
         # enhance/dehance
-        enhance = random.randint(0,8)
-        {0:self.saturate(), 1:self.desaturate(), 2:self.sharpen(), 3:self.blur(), 4:self.brighten, 5:self.darken()}.get(enhance, self.bg)
+        fry = random.randint(1, 6)
+        print(f'fry = {fry}')
+        for x in range(0, fry):
+            print(x)
+            enhance = random.randint(0,5)
+            print(f'enhance = {enhance}')
+            enhanced = {0:self.saturate, 1:self.desaturate, 2:self.sharpen, 3:self.blur, 4:self.brighten, 5:self.darken}.get(enhance, self.bg)
+            enhanced()
+
         # add noise
-        # noise = random.randint(0,7)
-        # {0:self.gaussian_noise(), 1:self.salt_n_pepper(), 2:self.poisson(), 3:self.speckle_noise()}.get(noise, self.bg)
+        fry = random.randint(1, 3)
+        for y in range(0, fry):
+            print(y)
+            noise = random.randint(0,2) #speckle just adds too much noise
+            print(f'noise = {noise}')
+            noisy = {0:self.gaussian_noise, 1:self.salt_n_pepper, 2:self.poisson, 3:self.speckle_noise}.get(noise, self.bg)
+            noisy()
+        self.sharpen()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
@@ -70,7 +88,8 @@ class AlbumCover:
         img = self.bg_to_nparray()
         row, col, ch = img.shape
         mean = 0.0 # ???
-        var = 10 # adjust this for FRYING LEVEL, originally 0.01
+        var = round(random.uniform(0.01, 0.1), 2) # adjust this for FRYING LEVEL, originally 0.01
+        print(f'adding gaussian noise with a var of {var}')
         sigma = var**0.5 # ???
         gauss = np.array(img.shape)
         gauss = np.random.normal(mean, sigma,(row, col, ch))
@@ -79,9 +98,10 @@ class AlbumCover:
         self.nparray_to_bg(noisy.astype('uint8'))
 
     def salt_n_pepper(self):
+        print(f'adding salt n pepper')
         image = self.bg_to_nparray()
         s_vs_p = 0.5 # salt vs pepper rate????
-        amount = 0.004 # fry amount
+        amount = round(random.uniform(0.01, 1), 2) # fry amount
         out = image
         # Generate Salt '1' noise
         num_salt = np.ceil(amount * image.size * s_vs_p)
@@ -96,6 +116,7 @@ class AlbumCover:
         self.nparray_to_bg(out)
     
     def poisson(self):
+        print(f'adding poisson')
         image = self.bg_to_nparray()
         vals = len(np.unique(image))
         vals = 2 ** np.ceil(np.log2(vals))
@@ -103,6 +124,7 @@ class AlbumCover:
         self.nparray_to_bg(noisy.astype('uint8'))
 
     def speckle_noise(self):
+        print(f'adding speckle')
         image = self.bg_to_nparray()
         row, col, ch = image.shape
         gauss = np.random.randn(row,col,ch)
@@ -112,28 +134,34 @@ class AlbumCover:
 
     # enhancers
     def saturate(self):
+        print("saturating")
         enhancer = ImageEnhance.Contrast(self.bg)
         self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 1))
     
     def desaturate(self):
+        print("desaturating")
         enhancer = ImageEnhance.Contrast(self.bg)
-        self.bg = enhancer.enhance(round(random.uniform(0.2, 1.0), 1))
+        self.bg = enhancer.enhance(round(random.uniform(0.3, 1.0), 1))
     
     def sharpen(self):
+        print("sharpening")
         enhancer = ImageEnhance.Sharpness(self.bg)
         self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 1))
 
     def blur(self):
+        print("blurring")
         enhancer = ImageEnhance.Sharpness(self.bg)
-        self.bg = enhancer.enhance(round(random.uniform(0.0, 1.0), 1))
+        self.bg = enhancer.enhance(round(random.uniform(0.2, 1.0), 1))
 
     def brighten(self):
+        print("brightening")
         enhancer = ImageEnhance.Sharpness(self.bg)
         self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 2))
     
     def darken(self):
+        print("darkening")
         enhancer = ImageEnhance.Sharpness(self.bg)
-        self.bg = enhancer.enhance(round(random.uniform(0.2, 1.0), 2))
+        self.bg = enhancer.enhance(round(random.uniform(0.3, 1.0), 2))
 
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):

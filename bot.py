@@ -47,7 +47,6 @@ if DEBUG:
     
     cover = AlbumCover(f'{root_dir}/img/test/test1.jpg', f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
     print(cover)
-    
     """
     still refining this, but working more on the bot part of this, but for now, its done-ish. working on deepfrying
     """
