@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageEnhance
 import numpy as np 
 from scipy.ndimage import filters
 from scipy import misc
@@ -52,20 +52,18 @@ class AlbumCover:
         # img = background_img.convert("L") #transformation()
         self.transform_image()
         path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
-        self.bg.paste(self.logo, self.logo_placement, self.logo)
+        # self.bg.paste(self.logo, self.logo_placement, self.logo)
         self.bg.save(path_for_post_to_twitter) # save it for debugging\
         return path_for_post_to_twitter
 
     def transform_image(self):
+        # enhance/dehance
+        enhance = random.randint(0,8)
+        {0:self.saturate(), 1:self.desaturate(), 2:self.sharpen(), 3:self.blur(), 4:self.brighten, 5:self.darken()}.get(enhance, self.bg)
         # add noise
-        noise = random.randint(0,7)
-        {0:self.gaussian_noise(), 1:self.salt_n_pepper(), 2:self.poisson(), 3:self.speckle_noise()}.get(noise, self.bg)
-        # self.gaussian_noise()
-        # self.salt_n_pepper()
-        # self.poisson()
-        # self.speckle_noise()
-        print(self.bg)
-        self.bg = self.bg.convert("L") # just greyscale it for now.
+        # noise = random.randint(0,7)
+        # {0:self.gaussian_noise(), 1:self.salt_n_pepper(), 2:self.poisson(), 3:self.speckle_noise()}.get(noise, self.bg)
+        # self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
     def gaussian_noise(self):
@@ -111,6 +109,31 @@ class AlbumCover:
         gauss = gauss.reshape(row,col,ch)        
         noisy = image + image * gauss
         self.nparray_to_bg(noisy.astype('uint8'))
+
+    # enhancers
+    def saturate(self):
+        enhancer = ImageEnhance.Contrast(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 1))
+    
+    def desaturate(self):
+        enhancer = ImageEnhance.Contrast(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(0.2, 1.0), 1))
+    
+    def sharpen(self):
+        enhancer = ImageEnhance.Sharpness(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 1))
+
+    def blur(self):
+        enhancer = ImageEnhance.Sharpness(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(0.0, 1.0), 1))
+
+    def brighten(self):
+        enhancer = ImageEnhance.Sharpness(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(1.0, 2.0), 2))
+    
+    def darken(self):
+        enhancer = ImageEnhance.Sharpness(self.bg)
+        self.bg = enhancer.enhance(round(random.uniform(0.2, 1.0), 2))
 
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):

@@ -107,3 +107,8 @@ darkthrone, batushka, ghost, mastadon, nightwish, battlebeast/beast in black, rh
 http://www.xiaoliangbai.com/2016/09/09/more-on-image-noise-generation
 
 todo: use this to make frypy - a lib for making fried memes
+
+ImageEnhance.Color - 0.0 is the same as .convert('L') -- random a number between 1.0 and 0.0 non-inclusive anything higher than 1 is 
+super saturated # probably wont use this one
+.Contrast: 0.0 is grey 1.0 is original higher than 1 is saturated
+.Brightness - 0.0 is black, 1.0 is original higher is washed out
