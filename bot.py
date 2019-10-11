@@ -8,16 +8,16 @@ import random
 from metal_albumify import AlbumCover
 import json
 
-CONSUMER_API = os.environ["CONSUMER_API_KEY"]
-CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
-ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
-ACCESS_SECRET = os.environ["ACCESS_SECRET"]
 DEBUG = os.environ["DEBUG"].lower() == "true"
-
-auth = tweepy.OAuthHandler(CONSUMER_API, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
-api = tweepy.API(auth)
+print(DEBUG)
 if not DEBUG:
+    CONSUMER_API = os.environ["CONSUMER_API_KEY"]
+    CONSUMER_SECRET = os.environ["CONSUMER_SECRET"]
+    ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
+    ACCESS_SECRET = os.environ["ACCESS_SECRET"]
+    auth = tweepy.OAuthHandler(CONSUMER_API, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+    api = tweepy.API(auth)
     genre = generate_genre(140) # half the tweet
     STEMS = [f"Oh, you think you are kvlt, I only listen to {genre}.", f"if you were really into metal you would know {genre}.", f"Hey, poser, I'm the founder of {genre}.", f"These fuckin' kids never heard of {genre}.", f"I remember the days before hipsters and posers infecting {genre}.", f"{genre} IS FOR REAL METALHEADS ONLY!!!!", f'I was listening to {genre} before you were born.', f"you like {genre}? ugh. that's for posers."]
     STEM = random.choice(STEMS)
@@ -45,7 +45,7 @@ if DEBUG:
             if "img/test" in rel_file:
                 test_cats.append(f'{root_dir}/{rel_file}')
     
-    cover = AlbumCover(f'{root_dir}/img/test/test1.jpg', f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
+    cover = AlbumCover(f'{root_dir}/img/test/test2.jpg', f'{root_dir}/img/logos/testlogo.png').paste_logo_image()
     print(cover)
     """
     still refining this, but working more on the bot part of this, but for now, its done-ish. working on deepfrying

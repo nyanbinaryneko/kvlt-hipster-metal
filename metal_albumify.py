@@ -1,4 +1,4 @@
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageOps
 import numpy as np 
 from scipy.ndimage import filters
 from scipy import misc
@@ -61,27 +61,27 @@ class AlbumCover:
         # i think the workflow here should be:
         # enhance/dehance a random number of times.
         # add noise a random number of times.
-
         # enhance/dehance
-        fry = random.randint(1, 6)
-        print(f'fry = {fry}')
-        for x in range(0, fry):
-            print(x)
-            enhance = random.randint(0,5)
-            print(f'enhance = {enhance}')
-            enhanced = {0:self.saturate, 1:self.desaturate, 2:self.sharpen, 3:self.blur, 4:self.brighten, 5:self.darken}.get(enhance, self.bg)
-            enhanced()
+        # fry = random.randint(1, 6)
+        # print(f'fry = {fry}')
+        # for x in range(0, fry):
+        #     print(x)
+        #     enhance = random.randint(0,5)
+        #     print(f'enhance = {enhance}')
+        #     enhanced = {0:self.saturate, 1:self.desaturate, 2:self.sharpen, 3:self.blur, 4:self.brighten, 5:self.darken}.get(enhance, self.bg)
+        #     enhanced()
 
-        # add noise
-        fry = random.randint(1, 3)
-        for y in range(0, fry):
-            print(y)
-            noise = random.randint(0,2) #speckle just adds too much noise
-            print(f'noise = {noise}')
-            noisy = {0:self.gaussian_noise, 1:self.salt_n_pepper, 2:self.poisson, 3:self.speckle_noise}.get(noise, self.bg)
-            noisy()
-        self.sharpen()
+        # # add noise
+        # fry = random.randint(1, 3)
+        # for y in range(0, fry):
+        #     print(y)
+        #     noise = random.randint(0,2) #speckle just adds too much noise
+        #     print(f'noise = {noise}')
+        #     noisy = {0:self.gaussian_noise, 1:self.salt_n_pepper, 2:self.poisson, 3:self.speckle_noise}.get(noise, self.bg)
+        #     noisy()
+        # self.sharpen()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
+        self.posterize()
 
     # noise transformers
     def gaussian_noise(self):
@@ -171,3 +171,9 @@ class AlbumCover:
         img = Image.fromarray(arr)
         img.convert('RGB')
         self.bg = img
+    
+    # pillow wrappers
+    def posterize(self):
+        rand = random.randint(1,4)
+        print(f'posterizing to {rand} channels')
+        self.bg = ImageOps.posterize(self.bg, rand)
