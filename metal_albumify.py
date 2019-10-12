@@ -1,11 +1,12 @@
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageEnhance, ImageOps, ImageFilter
 import numpy as np 
 from scipy.ndimage import filters
-from scipy import misc
+from scipy import misc, ndimage
 import random
 import requests
 import time
 import os 
+import math
 
 DEBUG = os.environ["DEBUG"].lower() == "true"
 
@@ -80,8 +81,11 @@ class AlbumCover:
         #     noisy = {0:self.gaussian_noise, 1:self.salt_n_pepper, 2:self.poisson, 3:self.speckle_noise}.get(noise, self.bg)
         #     noisy()
         # self.sharpen()
+        # self.posterize()
+        # self.solarize()
+        # self.sobel()
+        self.color_mask()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
-        self.posterize()
 
     # noise transformers
     def gaussian_noise(self):
@@ -163,6 +167,18 @@ class AlbumCover:
         enhancer = ImageEnhance.Sharpness(self.bg)
         self.bg = enhancer.enhance(round(random.uniform(0.3, 1.0), 2))
 
+    # filters
+    def sobel(self):
+        self.nparray_to_bg(ndimage.sobel(self.bg))
+    
+    def color_mask(self):
+        c = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        alpha = random.randint(100, 255) #0 is fully opaque, the mask shouldn't engulf the image
+        color = Image.new('RGB', self.bg_size, c)
+        mask = Image.new('RGBA', self.bg_size, (0,0,0, alpha))
+        print(f'placing mask with color {c} and alpha {alpha} over bg')
+        self.bg = Image.composite(self.bg, color, mask).convert()
+
     # helpers. written out to convert between the libs for image manipulation
     def bg_to_nparray(self):
         return np.array(self.bg)
@@ -177,3 +193,8 @@ class AlbumCover:
         rand = random.randint(1,4)
         print(f'posterizing to {rand} channels')
         self.bg = ImageOps.posterize(self.bg, rand)
+    
+    def solarize(self):
+        rand = random.randint(0, 128)
+        print(f'solarizing by inverting all pixels above {rand}.')
+        self.bg = ImageOps.solarize(self.bg, rand)
