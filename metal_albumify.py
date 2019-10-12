@@ -86,8 +86,19 @@ class AlbumCover:
         # self.sharpen()
         # self.posterize()
         # self.solarize()
+        high = self.high_intensity_pixels()
+        edges = self.map_edges(self.rgb_to_bgr())
+        edges = cv2.bitwise_not(edges)
+        edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
+        img = cv2.add(edges, high)
+        print(f'edges size:{edges.shape}\nhigh size: {high.shape}')
+        arr = self.bgr_to_rgb(img)
+        self.nparray_to_bg(arr)
+
+        self.bg = self.resize(self.bg)
+
         # self.sobel()
-        self.cellshade()
+        # self.cellshade()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
@@ -194,8 +205,6 @@ class AlbumCover:
 
         arr = self.bgr_to_rgb(img)
         self.nparray_to_bg(arr)
-        # needs to be resized again, converting between pil and cv2 messes with sizing
-        self.bg = self.resize(self.bg)
 
     def flatten_colors(self, downsampling=1, bilateral=2):
         # this seems to be the sweet spot for consistently getting a very "cartoony look"
@@ -229,6 +238,11 @@ class AlbumCover:
             C=2)
         return img_edge
 
+    def high_intensity_pixels(self):
+        img = self.rgb_to_bgr()
+        img[img < 128] = 0
+        return img
+
     # deep dream fuckery call will go here once i do it.
 
     # helpers. written out to convert between the libs for image manipulation
@@ -257,6 +271,7 @@ class AlbumCover:
         self.bg = ImageOps.posterize(self.bg, rand)
     
     def solarize(self):
+        self.bg = self.bg.convert('RGB')
         rand = random.randint(0, 128)
         print(f'solarizing by inverting all pixels above {rand}.')
         self.bg = ImageOps.solarize(self.bg, rand)
