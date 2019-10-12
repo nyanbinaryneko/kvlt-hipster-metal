@@ -18,11 +18,9 @@ class AlbumCover:
             self.bg = Image.open(requests.get(bg_url, stream=True).raw) #I really don't want to save this on Heroku
         else:
             self.bg = Image.open(bg_url)
+        self.bg_cv2 = cv2.imread(bg_url)
         self.logo = Image.open(logo_path)
         self.bg_size = self.bg.size
-        self.logo = self.logo.resize(self.resize_logo(25), Image.ANTIALIAS)
-        self.logo_size = self.logo.size
-        self.logo_placement = self.logo_placement()
 
     def resize_logo(self, percent):
         target_width = self.bg_size[0] * (percent / 100)
@@ -54,9 +52,10 @@ class AlbumCover:
         # img = background_img.convert("L") #transformation()
         self.transform_image()
         # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
-        path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}.jpg'
+        path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}'
         # self.bg.paste(self.logo, self.logo_placement, self.logo)
-        self.bg.save(path_for_post_to_twitter) # save it for debugging\
+        # self.bg.save(path_for_post_to_twitter) # save it for debugging\
+        cv2.imwrite(f'{path_for_post_to_twitter}.cv2.png', self.bg_cv2)
         return path_for_post_to_twitter
 
     def transform_image(self):
@@ -85,6 +84,9 @@ class AlbumCover:
         # self.posterize()
         # self.solarize()
         # self.sobel()
+        self.logo = self.logo.resize(self.resize_logo(25), Image.ANTIALIAS)
+        self.logo_size = self.logo.size
+        self.logo_placement = self.logo_placement()
         self.cellshade()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
@@ -183,32 +185,38 @@ class AlbumCover:
     # transformers
     # cellshading
     def cellshade(self):
-        number_downsampling = 2 # downsampling
-        number_bilateral = 7 # bilateral filtering
-        self.bg_to_cv2()
-        self.bg = self.resize(self.bg)
+        number_downsampling = 1 # downsampling
+        number_bilateral = 2 # bilateral filtering
+        self.bg_cv2 = self.resize(self.bg_cv2)
+        img_color = self.bg_cv2
 
         # downsample using gaussian pyramid -- look up what the fuck this is
         for _ in range(number_downsampling):
-            self.bg = cv2.pyrDown(self.bg)
+            img_color = cv2.pyrDown(img_color)
 
         # apply small bilateral filters, over one large one to give it more 
         # cell shaded look
         for _ in range(number_bilateral):
-            self.bg = cv2.pyrUp(self.bg)
+            img_color = cv2.pyrUp(img_color)
         
         # median filter to reduce noise
-        img_grey = cv2.cvtColor(self.bg, cv2.COLOR_RGB2GRAY)
+        img_grey = cv2.cvtColor(img_color, cv2.COLOR_RGB2GRAY)
         img_blur = cv2.medianBlur(img_grey, 7) #figure out what this number here does
+        cv2.imwrite(f'./corpus/img/output/test_out/{time.time()}.blur.png', img_blur)
 
         #use threshholding to create an edge mask, enhance edges
         # figure out what blocksize and C do
-        img_edge = cv2.adaptiveThreshold(img_blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=9, C=2)
+        img_edge = cv2.adaptiveThreshold(img_blur, 255,
+            cv2.ADAPTIVE_THRESH_MEAN_C,
+            cv2.THRESH_BINARY,
+            blockSize=9,
+            C=2)
+        
+        cv2.imwrite(f'./corpus/img/output/test_out/{time.time()}.edges.png', img_edge)
 
         #combine color img with edge mask
         img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
-        arr = self.cv2_to_bg(cv2.bitwise_and(self.bg, img_edge))
-        self.nparray_to_bg(arr)
+        self.bg_cv2 = cv2.bitwise_and(img_color, img_edge)
 
 
     # deep dream fuckery call will go here once i do it.

@@ -46,8 +46,8 @@ if DEBUG:
             if "img/test" in rel_file:
                 test_cats.append(f'{root_dir}/{rel_file}')
     
-    t =  Timer("AlbumCover('./corpus/img/test/test3.jpg', './corpus/img/logos/testlogo.png').paste_logo_image()", "from metal_albumify import AlbumCover").timeit()
-    print(f'time to run: {t}')
+    c = AlbumCover('./corpus/img/test/test4.png', './corpus/img/logos/testlogo.png').paste_logo_image()
+    print(f'cover at: {c}')
     """
     still refining this, but working more on the bot part of this, but for now, its done-ish. working on deepfrying
     """

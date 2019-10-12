@@ -13,6 +13,9 @@ pillow = "*"
 requests = "*"
 numpy = "*"
 scipy = "*"
+opencv = "*"
+open-cv = "*"
+opencv-python = "*"
 
 [requires]
 python_version = "3.6"
