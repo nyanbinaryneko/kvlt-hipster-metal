@@ -217,6 +217,7 @@ class AlbumCover:
         #combine color img with edge mask
         img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
         self.bg_cv2 = cv2.bitwise_and(img_color, img_edge)
+        #TODO: convert TO PIL
 
 
     # deep dream fuckery call will go here once i do it.
