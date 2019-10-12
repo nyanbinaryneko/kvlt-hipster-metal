@@ -18,16 +18,18 @@ class AlbumCover:
             self.bg = Image.open(requests.get(bg_url, stream=True).raw) #I really don't want to save this on Heroku
         else:
             self.bg = Image.open(bg_url)
-        self.bg_cv2 = cv2.imread(bg_url)
+        self.bg = self.resize(self.bg)
         self.logo = Image.open(logo_path)
         self.bg_size = self.bg.size
+        self.logo = self.resize(self.logo, self.resize_logo(25))
+        self.logo_size = self.logo.size
 
     def resize_logo(self, percent):
-        target_width = self.bg_size[0] * (percent / 100)
-        target_height = self.bg_size[1] * (percent / 100)
+        target_width = self.bg_size[0] * percent / 100
+        target_height = self.bg_size[1] * percent / 100
         # maintain aspect ratio
-        resize_width = target_width * (self.logo.size[0] / self.logo.size[1])
-        resize_height = target_height * (self.logo.size[1] / self.logo.size[0])
+        resize_width = target_width * self.logo.size[0] / self.logo.size[1]
+        resize_height = target_height * self.logo.size[1] / self.logo.size[0]
         return (int(resize_width), int(resize_height))
 
     def logo_placement(self):
@@ -36,6 +38,7 @@ class AlbumCover:
         bottom = self.bg_size[1] - self.logo_size[1]
         center_width = (self.bg_size[0]  / 2) - (self.logo_size[0] / 2)
         left = self.bg_size[0] - self.logo_size[0]
+        print(f'left: {left}')
         # top left:
         top_left = (left, 0)
         # bottom left:
@@ -52,10 +55,10 @@ class AlbumCover:
         # img = background_img.convert("L") #transformation()
         self.transform_image()
         # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
-        path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}'
-        # self.bg.paste(self.logo, self.logo_placement, self.logo)
-        # self.bg.save(path_for_post_to_twitter) # save it for debugging\
-        cv2.imwrite(f'{path_for_post_to_twitter}.cv2.png', self.bg_cv2)
+        path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}.png'
+        self.bg.paste(self.logo, self.logo_placement(), self.logo)
+        self.bg.save(path_for_post_to_twitter) # save it for debugging\
+        # cv2.imwrite(f'{path_for_post_to_twitter}.cv2.png', self.bg_cv2)
         return path_for_post_to_twitter
 
     def transform_image(self):
@@ -84,9 +87,6 @@ class AlbumCover:
         # self.posterize()
         # self.solarize()
         # self.sobel()
-        self.logo = self.logo.resize(self.resize_logo(25), Image.ANTIALIAS)
-        self.logo_size = self.logo.size
-        self.logo_placement = self.logo_placement()
         self.cellshade()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
@@ -185,11 +185,25 @@ class AlbumCover:
     # transformers
     # cellshading
     def cellshade(self):
+        img_color = self.flatten_colors()
+        img_edge = self.map_edges(img_color)
+
+        #combine color img with edge mask
+        img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
+        img = cv2.bitwise_and(img_color, img_edge)
+
+        arr = self.bgr_to_rgb(img)
+        self.nparray_to_bg(arr)
+        # needs to be resized again, converting between pil and cv2 messes with sizing
+        self.bg = self.resize(self.bg)
+
+    def flatten_colors(self, downsampling=1, bilateral=2):
+        # this seems to be the sweet spot for consistently getting a very "cartoony look"
         number_downsampling = 1 # downsampling
         number_bilateral = 2 # bilateral filtering
-        self.bg_cv2 = self.resize(self.bg_cv2)
-        img_color = self.bg_cv2
+        img_color = self.rgb_to_bgr()
 
+        # both of these "flatten" the colors in the img to give it that cartoon look
         # downsample using gaussian pyramid -- look up what the fuck this is
         for _ in range(number_downsampling):
             img_color = cv2.pyrDown(img_color)
@@ -198,11 +212,13 @@ class AlbumCover:
         # cell shaded look
         for _ in range(number_bilateral):
             img_color = cv2.pyrUp(img_color)
-        
+        return img_color
+
+    def map_edges(self, img_color):
+        # this smooths out some of the noise added by the downsamply and bilateral filtering
         # median filter to reduce noise
         img_grey = cv2.cvtColor(img_color, cv2.COLOR_RGB2GRAY)
         img_blur = cv2.medianBlur(img_grey, 7) #figure out what this number here does
-        cv2.imwrite(f'./corpus/img/output/test_out/{time.time()}.blur.png', img_blur)
 
         #use threshholding to create an edge mask, enhance edges
         # figure out what blocksize and C do
@@ -211,23 +227,14 @@ class AlbumCover:
             cv2.THRESH_BINARY,
             blockSize=9,
             C=2)
-        
-        cv2.imwrite(f'./corpus/img/output/test_out/{time.time()}.edges.png', img_edge)
-
-        #combine color img with edge mask
-        img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
-        self.bg_cv2 = cv2.bitwise_and(img_color, img_edge)
-        #TODO: convert TO PIL
-
+        return img_edge
 
     # deep dream fuckery call will go here once i do it.
 
     # helpers. written out to convert between the libs for image manipulation
-    def resize(self, cv2img, percent=50):
-        width = int(cv2img.shape[1] * percent / 100)
-        height = int(cv2img.shape[0] * percent / 100)
-        dim = (width, height)
-        return cv2.resize(cv2img, dim, interpolation=cv2.INTER_AREA)
+    def resize(self, img, dim=(400,400)):
+        print(f'dim: {dim}')
+        return img.resize(dim, Image.ANTIALIAS)
 
     def bg_to_nparray(self):
         return np.array(self.bg)
@@ -237,11 +244,11 @@ class AlbumCover:
         img.convert('RGB')
         self.bg = img
 
-    def bg_to_cv2(self):
-        self.bg = cv2.cvtColor(self.bg_to_nparray(), cv2.COLOR_RGB2BGR)
+    def rgb_to_bgr(self):
+        return cv2.cvtColor(self.bg_to_nparray(), cv2.COLOR_RGB2BGR)
     
-    def cv2_to_bg(self, cv_img):
-        return cv2.cvtColor(self.bg, cv2.COLOR_BGR2RGB)
+    def bgr_to_rgb(self, cv_img):
+        return cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
     
     # pillow wrappers
     def posterize(self):
