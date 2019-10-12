@@ -7,6 +7,7 @@ import requests
 import time
 import os 
 import math
+import cv2
 
 DEBUG = os.environ["DEBUG"].lower() == "true"
 
@@ -84,7 +85,7 @@ class AlbumCover:
         # self.posterize()
         # self.solarize()
         # self.sobel()
-        self.color_mask()
+        self.cellshade()
         # self.bg = self.bg.convert("L") # just greyscale it for now.
 
     # noise transformers
@@ -179,7 +180,46 @@ class AlbumCover:
         print(f'placing mask with color {c} and alpha {alpha} over bg')
         self.bg = Image.composite(self.bg, color, mask).convert()
 
+    # transformers
+    # cellshading
+    def cellshade(self):
+        number_downsampling = 2 # downsampling
+        number_bilateral = 7 # bilateral filtering
+        self.bg_to_cv2()
+        self.bg = self.resize(self.bg)
+
+        # downsample using gaussian pyramid -- look up what the fuck this is
+        for _ in range(number_downsampling):
+            self.bg = cv2.pyrDown(self.bg)
+
+        # apply small bilateral filters, over one large one to give it more 
+        # cell shaded look
+        for _ in range(number_bilateral):
+            self.bg = cv2.pyrUp(self.bg)
+        
+        # median filter to reduce noise
+        img_grey = cv2.cvtColor(self.bg, cv2.COLOR_RGB2GRAY)
+        img_blur = cv2.medianBlur(img_grey, 7) #figure out what this number here does
+
+        #use threshholding to create an edge mask, enhance edges
+        # figure out what blocksize and C do
+        img_edge = cv2.adaptiveThreshold(img_blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, blockSize=9, C=2)
+
+        #combine color img with edge mask
+        img_edge = cv2.cvtColor(img_edge, cv2.COLOR_GRAY2RGB)
+        arr = self.cv2_to_bg(cv2.bitwise_and(self.bg, img_edge))
+        self.nparray_to_bg(arr)
+
+
+    # deep dream fuckery call will go here once i do it.
+
     # helpers. written out to convert between the libs for image manipulation
+    def resize(self, cv2img, percent=50):
+        width = int(cv2img.shape[1] * percent / 100)
+        height = int(cv2img.shape[0] * percent / 100)
+        dim = (width, height)
+        return cv2.resize(cv2img, dim, interpolation=cv2.INTER_AREA)
+
     def bg_to_nparray(self):
         return np.array(self.bg)
     
@@ -187,6 +227,12 @@ class AlbumCover:
         img = Image.fromarray(arr)
         img.convert('RGB')
         self.bg = img
+
+    def bg_to_cv2(self):
+        self.bg = cv2.cvtColor(self.bg_to_nparray(), cv2.COLOR_RGB2BGR)
+    
+    def cv2_to_bg(self, cv_img):
+        return cv2.cvtColor(self.bg, cv2.COLOR_BGR2RGB)
     
     # pillow wrappers
     def posterize(self):
