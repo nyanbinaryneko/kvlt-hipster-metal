@@ -56,7 +56,7 @@ class AlbumCover:
         self.transform_image()
         # path_for_post_to_twitter = f'./corpus/img/output/{time.time()}.jpg'
         path_for_post_to_twitter = f'./corpus/img/output/test_out/{time.time()}.png'
-        self.bg.paste(self.logo, self.logo_placement(), self.logo)
+        # self.bg.paste(self.logo, self.logo_placement(), self.logo)
         self.bg.save(path_for_post_to_twitter) # save it for debugging\
         # cv2.imwrite(f'{path_for_post_to_twitter}.cv2.png', self.bg_cv2)
         return path_for_post_to_twitter
@@ -86,20 +86,46 @@ class AlbumCover:
         # self.sharpen()
         # self.posterize()
         # self.solarize()
-        high = self.high_intensity_pixels()
-        edges = self.map_edges(self.rgb_to_bgr())
-        edges = cv2.bitwise_not(edges)
-        edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
-        img = cv2.add(edges, high)
-        print(f'edges size:{edges.shape}\nhigh size: {high.shape}')
-        arr = self.bgr_to_rgb(img)
-        self.nparray_to_bg(arr)
-
-        self.bg = self.resize(self.bg)
-
+        # high = self.high_intensity_pixels()
+        # edges = self.map_edges(self.rgb_to_bgr())
+        # edges = cv2.bitwise_not(edges)
+        # edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
+        # img = cv2.add(edges, high)
+        # print(f'edges size:{edges.shape}\nhigh size: {high.shape}')
+        # arr = self.bgr_to_rgb(img)
+        # self.nparray_to_bg(arr)
         # self.sobel()
+        #black metalify
+        # self.gaussian_noise()
+        # self.saturate()
+        # self.saturate()
+        # # self.saturate()
+        # self.bg = self.bg.convert("L")
+        # self.darken()
+        # self.darken()
+        # self.darken()
+        # self.darken()
         # self.cellshade()
-        # self.bg = self.bg.convert("L") # just greyscale it for now.
+        # self.darken()
+        # self.bg = self.bg.convert("L")
+        # self.darken()
+        # self.bg = self.resize(self.bg)
+        # self.bg = self.bg.convert("L") # just greyscale it for now
+        #progifiy
+        self.gaussian_noise()
+        self.gaussian_noise()
+        self.saturate()
+        # self.saturate()
+        # self.saturate()
+        # self.saturate()
+        # self.saturate()
+        # self.saturate()
+        self.sharpen()
+        self.sharpen()
+        self.sharpen()
+        # self.posterize()
+        self.color_mask()
+        self.cellshade()
 
     # noise transformers
     def gaussian_noise(self):
@@ -186,10 +212,11 @@ class AlbumCover:
         self.nparray_to_bg(ndimage.sobel(self.bg))
     
     def color_mask(self):
-        c = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        # c = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        c = (138, 3 , 3)
         alpha = random.randint(100, 255) #0 is fully opaque, the mask shouldn't engulf the image
         color = Image.new('RGB', self.bg_size, c)
-        mask = Image.new('RGBA', self.bg_size, (0,0,0, alpha))
+        mask = Image.new('RGBA', self.bg_size, (0,0,0, 150))
         print(f'placing mask with color {c} and alpha {alpha} over bg')
         self.bg = Image.composite(self.bg, color, mask).convert()
 
