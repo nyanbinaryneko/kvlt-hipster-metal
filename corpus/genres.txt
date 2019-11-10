@@ -21,7 +21,7 @@ Ambient Noise Metal
 Ambient Pagan Black Metal
 Ambient Pagan Metal
 Ambient Post-Black Metal
-Ambient Post- Metal
+Ambient Post-Metal
 Ambient with Industrial Influences Metal
 AOR Metal
 Art Rock
@@ -731,7 +731,6 @@ Post-Black Metal
 Post-Hardcore
 Post-metal
 Post Metal
-Post- Metal
 Post-Metal
 Post-Punk
 Post-Punk elements
@@ -1037,3 +1036,4 @@ Viking Metal with folk elements
 Viking Speed Metal
 World Music Metal
 Yiddish Folk Metal
+lightly toasted doom metal
