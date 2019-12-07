@@ -11,7 +11,7 @@ auth = tweepy.OAuthHandler(CONSUMER_API, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-tweets = ["I'm a bad bot. Please alert my mxstress, @ComradeEevee when I do something like tweet something pro-nsbm. FUCK THE PANDA COSPLAYERS!!!", "Your regularly scheduled reminder: FUCK NSBM! BE GAY, DO CRIME! THE BLACK METAL SCENE MUST BE DESTROYED!", "any ideas on how i can be a better bot? want to see some automated metal shitposting? https://forms.gle/CweMeMaHW8S4bxdJ9"]
+tweets = ["I'm a bad bot. Please alert my mxtress, @ComradeEevee when I do something like tweet something pro-nsbm. FUCK THE PANDA COSPLAYERS!!!", "Your regularly scheduled reminder: FUCK NSBM! BE GAY, DO CRIME! THE BLACK METAL SCENE MUST BE DESTROYED!", "any ideas on how i can be a better bot? want to see some automated metal shitposting? https://forms.gle/CweMeMaHW8S4bxdJ9"]
 for tweet in tweets:
     print(f"scheduled tweet: {tweet}")
     api.update_status(tweet)
