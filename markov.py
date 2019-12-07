@@ -14,5 +14,5 @@ def generate_genre(total):
     # make a new genre:
     genre = text_model.make_short_sentence(total)
     print(f'markov - bullshit genre: {genre}')
-    return genre
+    return genre.title()
     
