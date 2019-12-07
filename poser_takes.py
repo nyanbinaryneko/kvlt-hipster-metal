@@ -46,7 +46,7 @@ def generate_poser_take():
                 "genres": genre_long
             },
             {
-                "sentence": f'Can anyone actually name a band that is {genre_short}? Spotify says they are a thing...but I don\'t believe them..',
+                "sentence": f'Can anyone actually name a band that is {genre_short[0]}? Spotify says they are a thing...but I don\'t believe them..',
                 "genres": genre_short
             },
             ]
