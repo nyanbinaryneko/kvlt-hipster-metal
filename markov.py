@@ -5,7 +5,7 @@ log = logging.getLogger("markov")
 log.setLevel(logging.DEBUG)
 
 def generate_genre(total):
-    with open("./corpus/genres.txt") as f:
+    with open("./corpus/nouns.txt") as f:
         text = f.read()
     
     # build model

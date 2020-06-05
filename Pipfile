@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+tweepy = "*"
+markovify = "*"
+Flask = "*"
+pillow = "*"
+requests = "*"
+numpy = "*"
+scipy = "*"
+opencv = "*"
+open-cv = "*"
+opencv-python = "*"
+
+[requires]
+python_version = "3.6"

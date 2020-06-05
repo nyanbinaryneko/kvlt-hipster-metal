@@ -49,6 +49,9 @@ def generate_poser_take():
                 "sentence": f'Can anyone actually name a band that is {genre_short[0]}? Spotify says they are a thing...but I don\'t believe them..',
                 "genres": genre_short
             },
+            {
+                "sentence": f'{genre_long[0]} was better in the 80s.'
+            }
             ]
     tweet = random.choice(STEMS)
     if random.randint(0, 10) == 1:
