@@ -74,5 +74,5 @@ def generate_poser_take():
             genre = " and ".join(genres)
         else:
             genre = genres
-        tweet["sentence"] = f'{genre.capitalize()}. IS FOR FUCKING POSERS! LISTEN TO REAL METAL YOU PANDA COSPLAYING COWARDS!'.upper()
+        tweet["sentence"] = f'{genre.upper()}. IS FOR FUCKING POSERS! LISTEN TO REAL METAL YOU PANDA COSPLAYING COWARDS!'.upper()
     return  tweet["sentence"]
