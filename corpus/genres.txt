@@ -15,7 +15,7 @@ Ambient Drone Metal
 Ambient Folk Metal
 Ambient Funeral Doom Metal
 Ambient Influences Metal
-- Ambient Metal
+Ambient Metal
 Ambient Metal
 Ambient Noise Metal
 Ambient Pagan Black Metal
@@ -137,7 +137,7 @@ Black Folk Metal
 Black Industrial Metal
 Black influences Metal
 Black metal
-- Black Metal
+Black Metal
 Black Metal
 Black Metal Influences
 Black Metal with Ambient
@@ -456,7 +456,7 @@ Gothic Extreme Metal
 Gothic Folk Metal
 Gothic Industrial Death Metal
 Gothic Influences Metal
-- Gothic Metal
+Gothic Metal
 Gothic Metal
 Gothic Metal with Doom elements
 Gothic Metal with Doom influences
@@ -553,7 +553,7 @@ Industrial Grindcore
 Industrial Groove Metal
 Industrial Hard Rock
 Industrial Heavy Metal
-- Industrial Metal
+Industrial Metal
 Industrial Metal
 Industrial Metal with Death Metal
 Industrial Noise Metal
@@ -567,6 +567,7 @@ Jazz Fusion Metal
 Jazz-Fusion Metal
 Jazz Metal
 Jazz Rock
+Unblack Metal
 Jazzy Progressive Death Metal
 Martial Dark Ambient Metal
 Martial Industrial Metal
@@ -861,6 +862,7 @@ Ritual Ambient Metal
 Ritual Dark Ambient Metal
 Rock
 Rockabilly
+christian unblack metal
 Rock Ballad
 Rock influences
 Rock 'n' Roll
@@ -4366,6 +4368,7 @@ lightly toasted doom metal
  drone ambient
  demoscene
  spanish psychedelic rock
+ occult rock
  ukrainian black metal
  jazz colombiano
  japanoise
