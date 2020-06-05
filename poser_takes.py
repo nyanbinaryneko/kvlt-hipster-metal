@@ -42,6 +42,10 @@ def generate_poser_take():
                 "genres": []
             },
             {
+                "sentence": f'Why listen to Tool when Soen, Katatonia, and Rivers of Nihil exist?',
+                "genres": []
+            },
+            {
                 "sentence": f'Blood Incantation is just Incantation for people who aren\'t racist.',
                 "genres": []
             },
