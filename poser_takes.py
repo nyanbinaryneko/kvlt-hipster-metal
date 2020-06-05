@@ -2,58 +2,69 @@ from markov import generate_genre
 import random
 
 def generate_poser_take():
-    genre_long = [ generate_genre(140) ]
-    genre_short = [ generate_genre(100) ]
+    genre = generate_genre(140)
+
     STEMS = [
             { 
-                "sentence": f"Oh, you think you are kvlt, I only listen to {genre_long[0]}.",
-                "genres": genre_long
+                "sentence": f"Oh, you think you are kvlt, I only listen to {genre.capitalize()}.",
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"if you were really into metal you would know {genre_long[0]}.",
-                "genres": genre_long
+                "sentence": f"if you were really into metal you would know {genre.capitalize()}.",
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"Hey, poser, I'm the founder of {genre_long[0]}.",
-                "genres": genre_long
+                "sentence": f"Hey, poser, I'm the founder of {genre.capitalize()}.",
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"These fuckin' kids never heard of {genre_long[0]}.",
-                "genres": genre_long
+                "sentence": f"These fuckin' kids never heard of {genre.capitalize()}.",
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"I remember the days before hipsters and posers infecting {genre_long[0]}.",
-                "genres": genre_long
+                "sentence": f"I remember the days before hipsters and posers infecting {genre.capitalize()}.",
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"{genre_long[0]} IS FOR REAL METALHEADS ONLY!!!!",
-                "genres": genre_long
+                "sentence": f"{genre.capitalize()} IS FOR REAL METALHEADS ONLY!!!!",
+                "genres": genre.split()
             }, 
             {
-                "sentence":f'I was listening to {genre_long[0]} before you were born.', 
-                "genres": genre_long
+                "sentence":f'I was listening to {genre.capitalize()} before you were born.', 
+                "genres": genre.split()
             }, 
             {
-                "sentence": f"you like {genre_long[0]}? ugh. that's for posers.",
-                "genres": genre_long
+                "sentence": f"you like {genre.capitalize()}? ugh. that's for posers.",
+                "genres": genre.split()
             },
             {
                 "sentence": f'Tool is just Radiohead for rape apologists.',
                 "genres": []
             },
             {
-                "sentence": f'Geez, who the fuck invented post-{genre_long[0]}core? It fuckin\' sucks.',
-                "genres": genre_long
+                "sentence": f'Blood Incantation is just Incantation for people who aren\'t racist.',
+                "genres": []
+            },
+            
+            {
+                "sentence": f'What if Devin Townsesnd was Weird Al this whole time?',
+                "genres": []
             },
             {
-                "sentence": f'Can anyone actually name a band that is {genre_short[0]}? Spotify says they are a thing...but I don\'t believe them..',
-                "genres": genre_short
+                "sentence": f'Geez, who the fuck invented post-{genre.capitalize()}core? It fuckin\' sucks.',
+                "genres": genre.split()
             },
             {
-                "sentence": f'{genre_long[0]} was better in the 80s.'
+                "sentence": f'Can anyone actually name a band that is {genre.capitalize()}? Spotify says they are a thing...but I don\'t believe them..',
+                "genres": genre.split()
+            },
+            {
+                "sentence": f'{genre.capitalize()} was better in the 80s.',
+                "genres": genre.split()
             }
             ]
     tweet = random.choice(STEMS)
+    print(tweet["genres"])
     if random.randint(0, 10) == 1:
         tweet["sentence"] = f'{tweet["sentence"]}'.upper()
 
@@ -62,6 +73,6 @@ def generate_poser_take():
         if(len(genres) > 1):
             genre = " and ".join(genres)
         else:
-            genre = genres[0]
-        tweet["sentence"] = f'{genre}. IS FOR FUCKING POSERS! LISTEN TO REAL METAL YOU PANDA COSPLAYING COWARDS!'.upper()
+            genre = genres
+        tweet["sentence"] = f'{genre.upper()}. IS FOR FUCKING POSERS! LISTEN TO REAL METAL YOU PANDA COSPLAYING COWARDS!'.upper()
     return  tweet["sentence"]
