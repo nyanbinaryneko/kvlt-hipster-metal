@@ -38,11 +38,11 @@ def generate_poser_take():
                 "genres": genre.split()
             },
             {
-                "sentence": f'Tool is just Radiohead for rape apologists.',
+                "sentence": f'Tool is just Radiohead for rape apologists. Listen to another band.',
                 "genres": []
             },
             {
-                "sentence": f'Why listen to Tool when Soen, Katatonia, and Rivers of Nihil exist?',
+                "sentence": f'Why listen to Tool when Soen, Porcupine Tree, Katatonia, and Rivers of Nihil exist?',
                 "genres": []
             },
             {
@@ -51,7 +51,7 @@ def generate_poser_take():
             },
             
             {
-                "sentence": f'What if Devin Townsesnd was Weird Al this whole time?',
+                "sentence": f'What if Devin Townsend was Weird Al this whole time?',
                 "genres": []
             },
             {
