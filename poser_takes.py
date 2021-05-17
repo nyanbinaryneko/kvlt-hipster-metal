@@ -51,7 +51,7 @@ def generate_poser_take():
             },
             
             {
-                "sentence": f'What if Devin Townsesnd was Weird Al this whole time?',
+                "sentence": f'What if Devin Townsend was Weird Al this whole time?',
                 "genres": []
             },
             {
